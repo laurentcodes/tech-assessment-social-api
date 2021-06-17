@@ -9,12 +9,6 @@ import {
 	resetPassword,
 } from '../controllers/userController.js';
 
-// import { protect } from '../middleware/authMiddleware.js';
-
-// router.get('/', (req, res) => {
-// 	res.send('User route working');
-// });
-
 // Register User Route
 router.post(
 	'/',
@@ -51,10 +45,5 @@ router.post(
 		.withMessage('Password must be 6 characters or more'),
 	resetPassword
 );
-
-// router
-// 	.route('/profile')
-// 	.get(protect, getUserProfile)
-// 	.put(protect, updateUserProfile);
 
 export default router;

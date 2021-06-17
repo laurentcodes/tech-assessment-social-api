@@ -187,10 +187,6 @@ const resetPassword = asyncHandler(async (req, res) => {
 	await tokenDB.delete();
 
 	res.status(201).json('Password reset Successfully');
-	// console.log(userId);
-	try {
-		// const user = await User.findById(req.para, s.userId);
-	} catch (err) {}
 });
 
 export { registerUser, loginUser, resetPasswordMail, resetPassword };
