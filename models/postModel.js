@@ -16,7 +16,7 @@ const postSchema = mongoose.Schema(
 			required: true,
 			unique: true,
 		},
-		replies: [{ type: String, required: false }],
+		replies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reply' }],
 		// likes: {
 		//   type: Number,
 		// }

@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 
 import User from '../models/userModel.js';
 import Post from '../models/postModel.js';
+import Reply from '../models/replyModel.js';
 
 // @desc    Publish a new post
 // @route   POST /api/posts/
@@ -142,4 +143,45 @@ const editPost = asyncHandler(async (req, res) => {
 	}
 });
 
-export { publishPost, fetchPost, deletePost, editPost };
+// @desc    Reply to a post
+// @route   PUT /api/post/reply/:id
+// @access  public
+const replyPost = asyncHandler(async (req, res) => {
+	const { id } = req.params;
+	const { text } = req.body;
+
+	const errors = validationResult(req);
+
+	// Check for errors and return if any
+	if (!errors.isEmpty()) {
+		errors.array().forEach((item) => {
+			res.status(400).json({
+				value: item.value,
+				message: item.msg,
+			});
+		});
+	}
+
+	// Create reply and save in database
+	const reply = await Reply.create({
+		post: id,
+		text,
+	});
+
+	// Get post
+	const post = await Post.findById(id);
+
+	if (!post) {
+		res.status(400).json({ error: 'Post not found' });
+	}
+
+	// Push the reply to the replies array on the post
+	post.replies.push(reply);
+
+	// Save changes
+	await post.save();
+
+	res.status(201).json({ message: 'Reply added Successfully', reply });
+});
+
+export { publishPost, fetchPost, deletePost, editPost, replyPost };
