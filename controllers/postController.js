@@ -23,16 +23,19 @@ const publishPost = asyncHandler(async (req, res) => {
 		});
 	}
 
+	// If user doesn't exist
 	if (!user) {
 		res.status(400).json({ error: 'Invalid token or User not found' });
 	}
 
+	// Check if post already exists
 	const postExists = await Post.findOne({ title });
 
 	if (postExists) {
 		res.status(400).json({ error: 'Post exists already' });
 	}
 
+	// Create post
 	const post = await Post.create({ userId: user._id, title, body });
 
 	if (post) {
@@ -52,6 +55,7 @@ const fetchPost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
 	const { id } = req.params;
 
+	// If user doesn't exist
 	if (!user) {
 		res.status(400).json({ error: 'Invalid token or User not found' });
 	}
@@ -77,6 +81,7 @@ const deletePost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
 	const { id } = req.params;
 
+	// If user doesn't exist
 	if (!user) {
 		res.status(400).json({ error: 'Invalid token or User not found' });
 	}
@@ -87,6 +92,7 @@ const deletePost = asyncHandler(async (req, res) => {
 		res.status(400).json({ error: 'Post not found' });
 	}
 
+	// Check if it's the user who created the post that's trying to delete it
 	if (user._id.toString() === post.userId.toString()) {
 		await Post.deleteOne({ _id: id });
 
@@ -114,9 +120,11 @@ const editPost = asyncHandler(async (req, res) => {
 		res.status(400).json({ error: 'Post not found' });
 	}
 
+	// Check if it's the user who created the post that's trying to edit it
 	if (user._id.toString() === post.userId.toString()) {
 		const postUpdate = {};
 
+		// Check for values in request body
 		if (title) postUpdate.title = title;
 		if (body) postUpdate.title = body;
 

@@ -40,13 +40,16 @@ const registerUser = asyncHandler(async (req, res) => {
 		password,
 	});
 
+	// Generate token
 	const tokenStr = generateToken(user._id);
 
+	// Save token to database
 	const token = await Token.create({
 		userId: user._id,
 		token: tokenStr,
 	});
 
+	// Check if user and token created successfully
 	if (user && token) {
 		res.status(201).json({
 			userId: user._id,
@@ -86,6 +89,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 	const user = await User.findOne({ email });
 
+	// If user exists and password matches
 	if (user && (await user.matchPassword(password))) {
 		res.json({
 			_id: user._id,
@@ -116,22 +120,25 @@ const resetPasswordMail = asyncHandler(async (req, res) => {
 		});
 	}
 
+	// Check for user in database
 	const user = await User.findOne({ email });
 
 	if (!user) {
 		res.status(400).json({ error: 'User does not exist' });
 	}
 
+	// Check if token exists
 	let token = await Token.findOne({ userId: user._id });
 
 	if (token) {
 		await token.deleteOne();
 
+		// Generate new token to be sent to user
 		let resetToken = crypto.randomBytes(32).toString('hex');
 		const salt = await bcrypt.genSalt(10);
-
 		const hash = await bcrypt.hash(resetToken, salt);
 
+		// Add new token to database
 		const tokenStr = await Token.create({
 			userId: user._id,
 			token: hash,
@@ -139,8 +146,10 @@ const resetPasswordMail = asyncHandler(async (req, res) => {
 
 		let clientURL = process.env.CLIENT_URL;
 
+		// Reset link to be sent to user
 		const link = `${clientURL}/users/reset/${tokenStr.token}/${user._id}`;
 
+		// Send the mail to user
 		sendMail(user, 'Password Reset', 'reset', link);
 
 		res.status(201).json(`Password reset link sent: ${link}`);
@@ -172,6 +181,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 		res.status(400).json('Invalid link or link expired');
 	}
 
+	// Check for token in the database
 	const tokenDB = await Token.findOne({
 		userId: user._id,
 		token: token,
@@ -181,9 +191,11 @@ const resetPassword = asyncHandler(async (req, res) => {
 		res.status(400).json('Invalid link or link expired');
 	}
 
-	user.password = req.body.password;
+	// Update user password to the new password and save changes to db
+	user.password = password;
 	await user.save();
 
+	// Delete token from database
 	await tokenDB.delete();
 
 	res.status(201).json('Password reset Successfully');

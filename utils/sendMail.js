@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 
 const sendMail = async (user, title, type, link) => {
 	let content;
+
 	var transport = nodemailer.createTransport({
 		host: 'smtp.mailtrap.io',
 		port: 2525,
@@ -11,6 +12,7 @@ const sendMail = async (user, title, type, link) => {
 		},
 	});
 
+	// Check mail type and set content accordingly
 	if (type == 'welcome') {
 		content = `Hello, ${user.name} you are welcome`;
 	} else if (type == 'reset') {
