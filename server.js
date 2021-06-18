@@ -6,6 +6,7 @@ import connectDB from './config/db.js';
 
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
+import imageRoutes from './routes/imageRoutes.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/images', imageRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

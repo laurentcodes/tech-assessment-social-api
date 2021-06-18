@@ -21,6 +21,7 @@ const postSchema = mongoose.Schema(
 			type: Number,
 		},
 		likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+		images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],
 	},
 	{
 		timestamps: true,
