@@ -10,6 +10,7 @@ import {
 	deletePost,
 	editPost,
 	replyPost,
+	likePost,
 } from '../controllers/postController.js';
 
 // Publish a new post
@@ -37,5 +38,8 @@ router.post(
 	body('text').notEmpty().withMessage('Reply can not be empty'),
 	replyPost
 );
+
+// Like a post
+router.post('/like/:id', auth, likePost);
 
 export default router;

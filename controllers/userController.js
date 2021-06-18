@@ -40,22 +40,13 @@ const registerUser = asyncHandler(async (req, res) => {
 		password,
 	});
 
-	// Generate token
-	const tokenStr = generateToken(user._id);
-
-	// Save token to database
-	const token = await Token.create({
-		userId: user._id,
-		token: tokenStr,
-	});
-
-	// Check if user and token created successfully
-	if (user && token) {
+	// Check if user created successfully
+	if (user) {
 		res.status(201).json({
 			userId: user._id,
 			name: user.name,
 			email: user.email,
-			token: tokenStr,
+			token: generateToken(user._id),
 		});
 
 		// Send Email to User
@@ -132,28 +123,28 @@ const resetPasswordMail = asyncHandler(async (req, res) => {
 
 	if (token) {
 		await token.deleteOne();
-
-		// Generate new token to be sent to user
-		let resetToken = crypto.randomBytes(32).toString('hex');
-		const salt = await bcrypt.genSalt(10);
-		const hash = await bcrypt.hash(resetToken, salt);
-
-		// Add new token to database
-		const tokenStr = await Token.create({
-			userId: user._id,
-			token: hash,
-		});
-
-		let clientURL = process.env.CLIENT_URL;
-
-		// Reset link to be sent to user
-		const link = `${clientURL}/users/reset/${tokenStr.token}/${user._id}`;
-
-		// Send the mail to user
-		sendMail(user, 'Password Reset', 'reset', link);
-
-		res.status(201).json(`Password reset link sent: ${link}`);
 	}
+
+	// Generate new token to be sent to user
+	let resetToken = crypto.randomBytes(32).toString('hex');
+	const salt = await bcrypt.genSalt(10);
+	const hash = await bcrypt.hash(resetToken, salt);
+
+	// Add new token to database
+	const tokenStr = await Token.create({
+		userId: user._id,
+		token: hash.replace(/\//g, 's'),
+	});
+
+	let clientURL = process.env.CLIENT_URL;
+
+	// Reset link to be sent to user
+	const link = `${clientURL}/users/reset/${tokenStr.token}/${user._id}`;
+
+	// Send the mail to user
+	sendMail(user, 'Password Reset', 'reset', link);
+
+	res.status(201).json(`Password reset link sent: ${link}`);
 });
 
 // @desc    Reset user password mail
@@ -195,8 +186,11 @@ const resetPassword = asyncHandler(async (req, res) => {
 	user.password = password;
 	await user.save();
 
-	// Delete token from database
-	await tokenDB.delete();
+	// If no validation errors
+	if (errors.isEmpty()) {
+		// Delete token from database
+		await tokenDB.delete();
+	}
 
 	res.status(201).json('Password reset Successfully');
 });

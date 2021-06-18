@@ -17,9 +17,10 @@ const postSchema = mongoose.Schema(
 			unique: true,
 		},
 		replies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reply' }],
-		// likes: {
-		//   type: Number,
-		// }
+		likes: {
+			type: Number,
+		},
+		likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	},
 	{
 		timestamps: true,

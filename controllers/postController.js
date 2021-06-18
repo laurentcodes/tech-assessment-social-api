@@ -104,7 +104,7 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 // @desc    Edit a post
-// @route   PUT /api/post/
+// @route   PUT /api/posts/:id
 // @access  public
 const editPost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
@@ -144,7 +144,7 @@ const editPost = asyncHandler(async (req, res) => {
 });
 
 // @desc    Reply to a post
-// @route   PUT /api/post/reply/:id
+// @route   PUT /api/posts/reply/:id
 // @access  public
 const replyPost = asyncHandler(async (req, res) => {
 	const { id } = req.params;
@@ -184,4 +184,44 @@ const replyPost = asyncHandler(async (req, res) => {
 	res.status(201).json({ message: 'Reply added Successfully', reply });
 });
 
-export { publishPost, fetchPost, deletePost, editPost, replyPost };
+// @desc    Like a post
+// @route   POST /api/posts/like/:id
+// @access  public
+const likePost = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user._id);
+	const { id } = req.params;
+
+	if (!user) {
+		res.status(400).json({ error: 'Invalid token or User not found' });
+	}
+
+	// Get post
+	const post = await Post.findById(id);
+
+	if (!post) {
+		res.status(400).json({ error: 'Post not found' });
+	}
+
+	// Check if user has liked the post and if not
+	// Add the user to the liked by array in the posts
+	if (post.likedBy.includes(user._id)) {
+		res.status(400).json({ error: 'Already liked by this user' });
+	} else {
+		post.likedBy.push(user._id);
+
+		let likes = post.likedBy.length;
+
+		await Post.findByIdAndUpdate(
+			id,
+			{ likes: likes },
+			{ new: true, useFindAndModify: true }
+		);
+
+		// Save changes
+		await post.save();
+	}
+
+	res.status(200).json('Post liked Successfully');
+});
+
+export { publishPost, fetchPost, deletePost, editPost, replyPost, likePost };
