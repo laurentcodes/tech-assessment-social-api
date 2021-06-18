@@ -1,10 +1,8 @@
 import asyncHandler from 'express-async-handler';
-import { validationResult } from 'express-validator';
 import upload from '../services/imageUpload.js';
 
 import Image from '../models/imageModel.js';
 import User from '../models/userModel.js';
-import Post from '../models/postModel.js';
 
 const singleUpload = upload.single('image');
 
@@ -19,13 +17,17 @@ const uploadImage = asyncHandler(async (req, res) => {
 		res.status(400).json({ error: 'Invalid token or User not found' });
 	}
 
+	// Upload Image
 	singleUpload(req, res, async (err) => {
+		// If any errors
 		if (err) {
 			res.status(401).json({ title: 'Image Upload Error', error: err.message });
 		}
 
+		// Save link of image
 		let imageLink = { image: req.file.location };
 
+		// Add image to Database
 		Image.create({ userId: user._id, url: imageLink.image })
 			.then((image) =>
 				res

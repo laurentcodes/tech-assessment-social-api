@@ -42,7 +42,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 	// Check if user created successfully
 	if (user) {
-		res.status(201).json({
+		res.status(200).json({
 			userId: user._id,
 			name: user.name,
 			email: user.email,
@@ -144,7 +144,7 @@ const resetPasswordMail = asyncHandler(async (req, res) => {
 	// Send the mail to user
 	sendMail(user, 'Password Reset', 'reset', link);
 
-	res.status(201).json(`Password reset link sent: ${link}`);
+	res.status(200).json(`Password reset link sent: ${link}`);
 });
 
 // @desc    Reset user password mail
@@ -192,7 +192,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 		await tokenDB.delete();
 	}
 
-	res.status(201).json('Password reset Successfully');
+	res.status(200).json('Password reset Successfully');
 });
 
 export { registerUser, loginUser, resetPasswordMail, resetPassword };

@@ -40,7 +40,7 @@ const publishPost = asyncHandler(async (req, res) => {
 	const post = await Post.create({ userId: user._id, title, body });
 
 	if (post) {
-		res.status(201).json({
+		res.status(200).json({
 			userId: user._id,
 			postId: post._id,
 			title: post.title,
@@ -64,7 +64,7 @@ const fetchPost = asyncHandler(async (req, res) => {
 	const post = await Post.findById(id);
 
 	if (post) {
-		res.status(201).json({
+		res.status(200).json({
 			title: post.title,
 			body: post.body,
 			userId: post.userId,
@@ -97,7 +97,7 @@ const deletePost = asyncHandler(async (req, res) => {
 	if (user._id.toString() === post.userId.toString()) {
 		await Post.deleteOne({ _id: id });
 
-		res.status(201).json({ message: 'Post deleted Successfully' });
+		res.status(200).json({ message: 'Post deleted Successfully' });
 	} else {
 		res.status(400).json({ error: 'Invalid Token or Unauthorized access' });
 	}
@@ -136,7 +136,7 @@ const editPost = asyncHandler(async (req, res) => {
 		);
 
 		res
-			.status(201)
+			.status(200)
 			.json({ message: 'Post updated Successfully', post: updatedPost });
 	} else {
 		res.status(400).json({ error: 'Invalid Token or Unauthorized access' });
@@ -181,7 +181,7 @@ const replyPost = asyncHandler(async (req, res) => {
 	// Save changes
 	await post.save();
 
-	res.status(201).json({ message: 'Reply added Successfully', reply });
+	res.status(200).json({ message: 'Reply added Successfully', reply });
 });
 
 // @desc    Like a post
