@@ -45,9 +45,9 @@ AWS_SECRET_ACCESS_KEY=<YOUR AWS SECRET KEY>
 
 ```js
 aws.config.update({
-	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-	region: 'us-east-2',
+ secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+ accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+ region: 'us-east-2',
 });
 ```
 
@@ -68,6 +68,20 @@ const upload = multer({
   },
  }),
 });
+```
+
+## Usage
+
+```npm
+npm run server
+```
+
+## Tests
+
+To run available tests;
+
+```npm
+npm run test
 ```
 
 ## Postman Docs
