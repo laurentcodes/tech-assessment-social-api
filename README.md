@@ -10,6 +10,17 @@ An api with Social Functionalities
 - Mailtrap
 - Amazon S3
 
+## Checks
+
+Run the following commands to check if Node and NPM are installed on your computer and you should get the outputs similar to the ones in comments;
+
+```npm
+node -v // v14.5
+npm -v // 6.14
+```
+
+If you get any errors refer to; <https://nodejs.org/en/download/>
+
 ## Get Started
 
 - Create a MongoDB Cluster on MongoDB Atlas or using a local installation of MongoDB Atlas and save your `Connection String` somewhere. Also set Bucket access to Public.
