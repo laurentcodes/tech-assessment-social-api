@@ -23,9 +23,9 @@ If you get any errors refer to; <https://nodejs.org/en/download/>
 
 ## Get Started
 
-- Create a MongoDB Cluster on MongoDB Atlas or using a local installation of MongoDB Atlas and save your `Connection String` somewhere. Also set Bucket access to Public.
+- Create a MongoDB Cluster on MongoDB Atlas or using a local installation of MongoDB Atlas and save your `Connection String` somewhere.
 
-- Create a Bucket on Amazon S3 and get the `Bucket Name` along with AWS Access Key and Secret Key and save it somewhere.
+- Create a Bucket on Amazon S3 and get the `Bucket Name` along with AWS Access Key and Secret Key and save it somewhere. Also set Bucket access to Public.
 
 - Clone the Repository to your local environment.
 
