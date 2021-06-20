@@ -14,11 +14,11 @@ const postSchema = mongoose.Schema(
 		body: {
 			type: String,
 			required: true,
-			unique: true,
 		},
 		replies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reply' }],
 		likes: {
 			type: Number,
+			default: 0,
 		},
 		likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 		images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],

@@ -30,11 +30,11 @@ const publishPost = asyncHandler(async (req, res) => {
 	}
 
 	// Check if post already exists
-	const postExists = await Post.findOne({ title });
+	// const postExists = await Post.findOne({ title });
 
-	if (postExists) {
-		res.status(400).json({ error: 'Post exists already' });
-	}
+	// if (postExists) {
+	// 	res.status(400).json({ error: 'Post exists already' });
+	// }
 
 	// Create post
 	const post = await Post.create({ userId: user._id, title, body });
@@ -44,7 +44,7 @@ const publishPost = asyncHandler(async (req, res) => {
 			userId: user._id,
 			postId: post._id,
 			title: post.title,
-			body: post.body,
+			body: post.body,	
 		});
 	}
 });
