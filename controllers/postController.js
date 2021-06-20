@@ -44,14 +44,14 @@ const publishPost = asyncHandler(async (req, res) => {
 			userId: user._id,
 			postId: post._id,
 			title: post.title,
-			body: post.body,	
+			body: post.body,
 		});
 	}
 });
 
 // @desc    Fetch a post
 // @route   GET /api/posts/:id
-// @access  public
+// @access  private
 const fetchPost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
 	const { id } = req.params;
@@ -77,7 +77,7 @@ const fetchPost = asyncHandler(async (req, res) => {
 
 // @desc    Delete a post
 // @route   DELETE /api/posts/:id
-// @access  public
+// @access  private
 const deletePost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
 	const { id } = req.params;
@@ -105,7 +105,7 @@ const deletePost = asyncHandler(async (req, res) => {
 
 // @desc    Edit a post
 // @route   PUT /api/posts/:id
-// @access  public
+// @access  private
 const editPost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
 	const { title, body } = req.body;
@@ -186,7 +186,7 @@ const replyPost = asyncHandler(async (req, res) => {
 
 // @desc    Like a post
 // @route   POST /api/posts/like/:id
-// @access  public
+// @access  private
 const likePost = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
 	const { id } = req.params;
