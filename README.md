@@ -27,6 +27,19 @@ If you get any errors refer to; <https://nodejs.org/en/download/>
 
 - Create a Bucket on Amazon S3 and get the `Bucket Name` along with AWS Access Key and Secret Key and save it somewhere. Also set Bucket access to Public.
 
+- Create a Mailtrap account and get your Integration parameters which will be used in `sendMail.js`; Configure the nodemailer transport as follows
+
+```js
+var transport = nodemailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: <YOUR-MAILTRAP-USER>,
+    pass: <YOUR-MAILTRAP-PASS>
+  }
+});
+```
+
 - Clone the Repository to your local environment.
 
 ```git
